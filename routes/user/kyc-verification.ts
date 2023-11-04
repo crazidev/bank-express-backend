@@ -7,27 +7,37 @@ import { mixed, object, string } from "yup";
 import { User } from "../../models";
 const crypto = require('crypto');
 const path = require('path');
+import { TransformationOptions, v2 as cloudinary } from 'cloudinary';
 
 var router = express.Router();
+
+cloudinary.config({
+    cloud_name: process.env.CLOUDINARY_NAME,
+    api_key: process.env.CLOUDINARY_KEY,
+    api_secret: process.env.CLOUDINARY_SECRET
+});
+
 router.use(fileUpload({
+    useTempFiles: true,
+    tempFileDir: '.tmp/',
+
     limits: {
         fileSize: 10000000 // 10mb
     }, abortOnLimit: true
 }));
+
 router.post('/user/kyc-verification', async function (req: any, res: Response) {
-    var field;
+    var field: { ssn: string; idDocType: NonNullable<"national_id" | "drivers_license" | "international_passport" | undefined>; };
 
     const allow_file_type = ['png', 'jpeg', 'jpg']; // Accepted file types
 
     // Function to check file type and return boolean
     function checkType(file: UploadedFile) {
-
         // var mimeType = mime.extension(file.mimetype).toString();
-
         // console.log('Uploaded filetype: ', mimeType, file.mimetype);
         // return allow_file_type.includes(mimeType);
         return true
-        
+
     }
 
     try {
@@ -37,7 +47,6 @@ router.post('/user/kyc-verification', async function (req: any, res: Response) {
         }).validateSync(req.files, { abortEarly: false, stripUnknown: true });
     } catch (e) {
         const error = e as ValidationError;
-        console.log('Stage 1');
         return res.status(422).json({
             errors: error.errors, status: false,
             statusCode: 'ImageTypeError',
@@ -55,7 +64,6 @@ router.post('/user/kyc-verification', async function (req: any, res: Response) {
         field = validator.validateSync(req.body, { abortEarly: false, stripUnknown: true });
     } catch (e) {
         const error = e as ValidationError;
-        console.log('Stage 2');
         return res.status(422).json({
             errors: error.errors, status: false,
             statusCode: 'EmptyField',
@@ -66,8 +74,10 @@ router.post('/user/kyc-verification', async function (req: any, res: Response) {
     const profile_img_ = profile_img as UploadedFile;
     const id_document_ = id_document as UploadedFile;
 
-    var profile_path = 'public/profile_images/' + crypto.randomUUID() + '.jpg';
-    var id_document_path = 'public/id_documents/' + crypto.randomUUID() + '.jpg';
+
+    // Use crypto to generate unique file names
+    const profile_filename = crypto.randomBytes(16).toString('hex') + path.extname(profile_img_.name);
+    const id_document_filename = crypto.randomBytes(16).toString('hex') + path.extname(id_document_.name);
 
     var user = await User.findOne({
         where: {
@@ -75,26 +85,45 @@ router.post('/user/kyc-verification', async function (req: any, res: Response) {
         }
     });
 
+
     if (user != null) {
-        await profile_img_.mv(profile_path).catch((e) => {
-            return res.status(422).json({ errors: e });
-        });
-        await id_document_.mv(id_document_path).catch((e) => {
-            return res.status(422).json({ errors: e });
+        cloudinary.uploader.upload(profile_img_.tempFilePath, {
+            public_id: 'hybank/profile_images/' + profile_filename,
+            transformation: {
+                width: 200
+            }
+        }).then(async (profileResult) => {
+            cloudinary.uploader.upload(id_document_.tempFilePath, {
+                public_id: 'hybank/id_documents/' + id_document_filename,
+            }).then(async (idDocResult) => {
+
+                if (user != null) {
+                    user.ssn = field.ssn;
+                    user.ssnStatus = 'uploaded';
+                    user.idDoc = idDocResult.secure_url;
+                    user.idDocType = field.idDocType;
+                    user.idDocStatus = 'uploaded';
+                    user.profileImg = profileResult.secure_url;
+
+                    await user.save();
+                    return res.json({ status: true, message: 'Your documents have been uploaded' });
+                }
+            }).catch((e) => {
+                console.error(e);
+                return res.status(500).json({
+                    status: false, message: 'Error uploading ID document to Cloudinary',
+                    statusCode: 'ImageUploadFailed',
+                });
+            });
+        }).catch((e) => {
+            console.error(e);
+            return res.status(500).json({
+                status: false, message: 'Error uploading profile image to Cloudinary',
+                statusCode: 'ImageUploadFailed',
+            });
         });
 
-        user.ssn = field.ssn;
-        user.ssnStatus = 'uploaded';
-        user.idDoc = id_document_path;
-        user.idDocType = field.idDocType;
-        user.idDocStatus = 'uploaded';
-        user.profileImg = profile_path;
-
-        await user.save()
-        console.log('Stage 3');
-        return res.json({ status: true, message: 'Your documents have been uploaded' });
     } else {
-        console.log('Stage 4');
         return res.status(404).json({
             status: false, message: 'Something went wrong',
             statusCode: 'ImageUploadFailed',

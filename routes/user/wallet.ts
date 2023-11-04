@@ -83,7 +83,6 @@ function filterWalletBalances(user_id: number, list: Wallet[]) {
         }
     }
 
-    console.log('Returning filtered list', filteredList);
     return filteredList;
 }
 
