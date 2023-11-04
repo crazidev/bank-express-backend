@@ -21,21 +21,6 @@ router.all("/sync", async function (req: Request, res: Response) {
     console.log('init database');
     initModels(db);
 
-    if (!fs.existsSync('public/profile_images/')) {
-      fs.mkdirSync('public/profile_images/', { recursive: true });
-      console.log('Creating folder public/profile_images/')
-    }
-
-    if (!fs.existsSync('public/id_documents/')) {
-      fs.mkdirSync('public/id_documents/', { recursive: true });
-      console.log('Creating folder public/id_documents/')
-    }
-
-    if (!fs.existsSync('public/livechat/')) {
-      fs.mkdirSync('public/livechat/', { recursive: true });
-      console.log('Creating folder public/livechat/')
-    }
-
   } catch (error) {
     console.error('Unable to connect to the database:', error);
   }
