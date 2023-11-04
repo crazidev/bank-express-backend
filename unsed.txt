@@ -1,0 +1,19 @@
+
+    /// Virtual fields
+    declare pinStatus: boolean | null
+    declare isVerified: boolean | null
+      pinStatus: {
+        type: DataTypes.VIRTUAL,
+        get() {
+          return this.pin == null ? false : true;
+        },
+      },
+      isVerified: {
+        type: DataTypes.VIRTUAL,
+        get() {
+          if (this.ssnStatus == 'verified' && this.idDocStatus == 'verified') {
+            return true;
+          } else return false;
+        },
+      },
+      /// Virtual field
