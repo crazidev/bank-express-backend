@@ -40,7 +40,6 @@ const transactions = require('./routes/user/transaction');
 const findBeneficiary = require('./routes/user/find-beneficiary');
 const livechat = require('./routes/user/livechat');
 const updatePushID = require('./routes/user/update-token');
-const apple = require('./routes/apple');
 
 app.use('/', (req, res, next) => {
   initModels(db);
@@ -63,7 +62,6 @@ app.use(transactions);
 app.use(findBeneficiary);
 app.use(livechat);
 app.use(updatePushID);
-app.use(apple);
 app.use('/version', getCurrentVersion);
 
 const server = app.listen(port, async () => {

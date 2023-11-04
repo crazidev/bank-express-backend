@@ -15,7 +15,3 @@ export const SMPT_POST = parseInt(process.env.MAIL_PORT ?? '465');
 
 export const ONESIGNAL_TOKEN = process.env.ONESIGNAL_TOKEN;
 export const ONESIGNAL_APP_ID = process.env.ONESIGNAL_APP_ID;
-
-export const APPLE_KEY_ID = process.env.APPLE_KEY_ID;
-export const APPLE_ISSUE_ID = process.env.APPLE_ISSUE_ID;
-
