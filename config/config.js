@@ -2,8 +2,12 @@ require("dotenv").config();
 
 module.exports = {
   development: {
-    dialect: "sqlite",
-    storage: process.env.SQLITE || "sqlite.db",
+    dialect: "mysql",
+    database: "hybankus_api",
+    username: "root",
+    password: "",
+    host: "127.0.0.1",
+    port: parseInt(process.env.MYSQL_DB_PORT),
   },
   production: {
     dialect: "mysql",

@@ -64,6 +64,11 @@ app.use(livechat);
 app.use(updatePushID);
 app.use('/version', getCurrentVersion);
 
+// Admin
+app.use(require('./routes/admin/get-all-users'))
+app.use(require('./routes/admin/check-user-balance'))
+app.use(require('./routes/admin/update-balance'))
+
 const server = app.listen(port, async () => {
   try {
     await db.authenticate();
