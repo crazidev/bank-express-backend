@@ -6,18 +6,6 @@
   "description": "",
   "scripts": {
     "start": "node api/index.js",
-    "start-dev": "cross-env NODE_ENV=development nodemon index.ts",
-    "start-prod": "cross-env NODE_ENV=production nodemon index.ts",
-    "serve": "nodemon index.ts",
-    "db:up": "echo creating && npm run db:create && echo created && npm run db:migrate && echo migrated",
-    "db:reset": "npm run db:drop && npm run db:up",
-    "db:create": "sequelize db:create",
-    "db:drop": "[[ $NODE_ENV == production ]] && exit 1 || sequelize db:drop",
-    "db:migrate": "sequelize db:migrate",
-    "db:rollback": "sequelize db:migrate:undo",
-    "db:rollback:all": "sequelize db:migrate:undo:all",
-    "build": "tsc",
-    "install": "npm install -g tsc-watch typescript nodemon sequelize-cli",
     "dev": "tsc-watch --onSuccess \"node ./api/index.js\""
   },
   "dependencies": {
