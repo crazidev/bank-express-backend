@@ -47,7 +47,8 @@
     "nodemailer": "^6.9.4",
     "qrcode": "^1.5.3",
     "uuid": "^9.0.1",
-    "yup": "^1.2.0"
+    "yup": "^1.2.0",
+    "sqlite3": "^5.1.6"
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.0",
