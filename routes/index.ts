@@ -3,36 +3,33 @@ import db from "../database";
 import { authenticateToken } from "../middleware/JWT";
 import { Wallet, initModels } from "../models";
 import { APP_NAME } from "../config/constants";
-var fs = require('fs');
-const jwt = require('jsonwebtoken'); // npm i jsonwebtoken
-const fetch = require('node-fetch');
-
+var fs = require("fs");
+const jwt = require("jsonwebtoken"); // npm i jsonwebtoken
+const fetch = require("node-fetch");
 
 var router = express.Router();
 
 router.all("/sync", async function (req: Request, res: Response) {
   try {
     await db.authenticate();
-    console.log('Connection has been established successfully.');
+    console.log("Connection has been established successfully.");
     // await db.drop();
-    console.log('Force sync database');
+    console.log("Force sync database");
     await db.sync();
 
-    console.log('init database');
+    console.log("init database");
     initModels(db);
-
   } catch (error) {
-    console.error('Unable to connect to the database:', error);
+    console.error("Unable to connect to the database:", error);
   }
-  return res.send('Server is working');
+  return res.send("Server is working");
 });
 
-router.use('/user/', authenticateToken, (req, res, next) => {
-  next()
+router.use("/user/", authenticateToken, (req, res, next) => {
+  next();
 });
 
-
-router.get("/", (req, res) => res.type('html').send(html));
+router.all("/", (req, res) => res.type("html").send(html));
 
 const html = `
 <!DOCTYPE html>
@@ -84,6 +81,6 @@ const html = `
   </body>
   <script src="//code.tidio.co/r3omzenqj5d0psoguqgsikdf5j9qhsah.js" async></script>
 </html>
-`
+`;
 
 module.exports = router;
