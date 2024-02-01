@@ -5,7 +5,7 @@
   "main": "index.ts",
   "description": "",
   "scripts": {
-    "start": "cross-env NODE_ENV=production nodemon ./api/index.js",
+    "start": "nodemon ./api/index.js",
     "start-dev": "cross-env NODE_ENV=development nodemon index.ts",
     "start-prod": "cross-env NODE_ENV=production nodemon index.ts",
     "serve": "nodemon index.ts",
