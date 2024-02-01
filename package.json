@@ -17,7 +17,7 @@
     "db:rollback": "sequelize db:migrate:undo",
     "db:rollback:all": "sequelize db:migrate:undo:all",
     "build": "tsc",
-    "install": "npm install -g tsc-watch typescript nodemon sequelize-cli",
+    "install": "npm install -g tsc-watch typescript nodemon sequelize-cli cross-env",
     "dev": "tsc-watch --onSuccess \"node ./api/index.js\""
   },
   "dependencies": {
