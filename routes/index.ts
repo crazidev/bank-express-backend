@@ -13,9 +13,9 @@ router.all("/sync", async function (req: Request, res: Response) {
   try {
     await db.authenticate();
     console.log("Connection has been established successfully.");
-    // await db.drop();
+    await db.drop();
     console.log("Force sync database");
-    await db.sync();
+    await db.sync({ force: true });
 
     console.log("init database");
     initModels(db);

@@ -2,7 +2,6 @@
 import express, { json } from "express";
 import { initModels } from "./models";
 import db from "./database";
-import fs from "fs";
 import morgan from "morgan";
 import cors from "cors";
 require("dotenv").config();
@@ -70,7 +69,6 @@ app.use(require("./routes/admin/update-balance"));
 const server = app.listen(port, async () => {
   try {
     await db.authenticate();
-    // await db.sync({ force: true });
     console.log("Connection has been established successfully.");
   } catch (error) {
     // server.close();
