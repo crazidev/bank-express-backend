@@ -3,7 +3,7 @@
     "target": "ES2022",
     "module": "commonjs",
     "rootDir": "./",
-    "outDir": "./api",
+    "outDir": "./build",
     "esModuleInterop": true,
     "strict": true,
     "allowJs": true,
