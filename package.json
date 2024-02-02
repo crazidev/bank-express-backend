@@ -2,7 +2,7 @@
   "name": "bank-express-backend",
   "version": "0.0.0",
   "private": true,
-  "main": "index.ts",
+  "main": "api/index.js",
   "description": "",
   "scripts": {
     "start": "nodemon ./api/index.js",
