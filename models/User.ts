@@ -67,6 +67,7 @@ export class User extends Model<
   declare pushId: string | null;
   declare lastSeen: Date | null;
   declare status: "blocked" | "active" | "suspended" | null;
+  declare canTransfer: boolean | null;
 
   // User hasMany Transaction (as Transactions)
   declare transactions?: NonAttribute<Transaction[]>;
@@ -277,6 +278,11 @@ export class User extends Model<
           type: DataTypes.ENUM("blocked", "active", "suspended"),
           defaultValue: "active",
         },
+        canTransfer: {
+          type: DataTypes.BOOLEAN,
+          defaultValue: false,
+          allowNull: true,
+        },
         /// Virtual fields
         pinStatus: {
           type: DataTypes.VIRTUAL,
@@ -295,7 +301,6 @@ export class User extends Model<
             } else return false;
           },
         },
-        /// Virtual field
       },
       {
         sequelize,
