@@ -1,7 +1,7 @@
 import express, { Router, Request, Response } from "express";
 import * as yup from "yup";
 import { ValidationError, where } from "sequelize";
-import { User } from "../../../models";
+import { Transaction, User, Wallet } from "../../../models";
 
 var router = express.Router();
 

@@ -5,12 +5,12 @@ import { User } from "../../../models";
 
 var router = express.Router();
 
-router.post("/admin/updateBalance", async (req: Request, res: Response) => {
+router.post("/admin/update-balance", async (req: Request, res: Response) => {
   try {
     var field;
     let validator = yup.object({
       id: yup.string().required(),
-      balance: yup.number(),
+      balance: yup.number().required(),
     });
 
     try {

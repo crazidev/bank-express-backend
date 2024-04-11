@@ -1,11 +1,21 @@
 {
-  "sqltools.useNodeRuntime": true,
+  "[typescript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "deno.enable": true,
+  "deno.enablePaths": [
+    "supabase/functions"
+  ],
+  "deno.importMap": "supabase/functions/import_map.json",
+  "deno.lint": true,
+  "deno.unstable": true,
   "sqltools.connections": [
     {
-      "previewLimit": 50,
-      "driver": "SQLite",
       "database": "${workspaceFolder:express-server}/sqlite.db",
-      "name": "HyBank"
+      "driver": "SQLite",
+      "name": "HyBank",
+      "previewLimit": 50
     }
-  ]
+  ],
+  "sqltools.useNodeRuntime": true
 }

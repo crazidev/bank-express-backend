@@ -6,13 +6,13 @@ import { User } from "../../../models";
 var router = express.Router();
 
 router.post(
-  "/admin/change-user-password",
+  "/admin/change-user-tier",
   async (req: Request, res: Response) => {
     try {
       var field;
       let validator = yup.object({
         id: yup.string().required(),
-        password: yup.string(),
+        tier: yup.mixed().oneOf(["tier1", "tier2", "tier3"]).required(),
       });
 
       try {
@@ -27,7 +27,7 @@ router.post(
 
       await User.update(
         {
-          password: field.password,
+         accountLevel: field.tier as any 
         },
         {
           where: {
@@ -38,7 +38,7 @@ router.post(
 
       return res.status(200).json({
         status: true,
-        message: "Password updated successfully",
+        message: "Account level updated successfully",
       });
     } catch (error) {
       console.error(error);

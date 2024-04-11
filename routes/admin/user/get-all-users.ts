@@ -5,7 +5,7 @@ import { User } from "../../../models";
 
 var router = express.Router();
 
-router.get("/admin/getUsers", async (req: Request, res: Response) => {
+router.get("/admin/get-all-users", async (req: Request, res: Response) => {
   try {
     return res.status(200).json(await User.findAll({}));
   } catch (error) {

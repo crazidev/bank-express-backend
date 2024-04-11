@@ -13,9 +13,10 @@ router.all("/sync", async function (req: Request, res: Response) {
   try {
     await db.authenticate();
     console.log("Connection has been established successfully.");
-    await db.drop();
+    // await db.drop();
     console.log("Force sync database");
-    await db.sync({ force: true });
+    await db.sync({ alter: true });
+    
 
     console.log("init database");
     initModels(db);
@@ -28,6 +29,10 @@ router.all("/sync", async function (req: Request, res: Response) {
 router.use("/user/", authenticateToken, (req, res, next) => {
   next();
 });
+
+// router.use("/admin/", authenticateToken, (req, res, next) => {
+//   next();
+// });
 
 router.all("/", (req, res) => res.type("html").send(html));
 

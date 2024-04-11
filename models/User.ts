@@ -68,6 +68,7 @@ export class User extends Model<
   declare lastSeen: Date | null;
   declare status: "blocked" | "active" | "suspended" | null;
   declare canTransfer: boolean | null;
+  declare isAdmin: boolean | null;
 
   // User hasMany Transaction (as Transactions)
   declare transactions?: NonAttribute<Transaction[]>;
@@ -269,6 +270,11 @@ export class User extends Model<
         },
         pushId: {
           type: DataTypes.STRING,
+        },
+        isAdmin: {
+          type: DataTypes.BOOLEAN,
+          defaultValue: false,
+          allowNull: true
         },
         lastSeen: {
           type: DataTypes.DATE,
