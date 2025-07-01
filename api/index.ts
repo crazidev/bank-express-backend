@@ -11,17 +11,6 @@ var port = process.env.PORT;
 import BodyParser from "body-parser";
 import getCurrentVersion from "./routes/version-checker";
 
-// Handle preflight requests (OPTIONS)
-app.options("*", cors()); // Allow preflight requests for all routes
-
-app.use(cors());
-
-// Middlewares
-app.use(morgan("common"));
-app.use(express.urlencoded({ extended: false }));
-app.use(json());
-app.use(BodyParser.urlencoded());
-
 const index = require("./routes/index");
 const login = require("./routes/auth/login");
 const register = require("./routes/auth/register");
@@ -38,55 +27,58 @@ const findBeneficiary = require("./routes/user/find-beneficiary");
 const livechat = require("./routes/user/livechat");
 const updatePushID = require("./routes/user/update-token");
 
-app.use("/api", (req, res, next) => {
-  app.use("/", (req, res, next) => {
-    initModels(db);
-    next();
-  });
+// Handle preflight requests (OPTIONS)
+app.options("*", cors()); // Allow preflight requests for all routes
 
-  app.get("/sync-db", async (req, res) => {
-    console.log("Syncing db");
-    await db.sync({});
+app.use(cors());
 
-    res.send("Done");
-  });
+// Middlewares
+app.use(morgan("common"));
+app.use(express.urlencoded({ extended: false }));
+app.use(json());
+app.use(BodyParser.urlencoded());
 
-  app.use("/public", express.static("public"));
-  app.use(index);
-  app.use(login);
-  app.use(register);
-  app.use(user_details);
-  app.use(kyc_verification);
-  app.use(send_otp);
-  app.use(verify_otp);
-  app.use(email_verification);
-  app.use(password);
-  app.use(pin);
-  app.use(wallet);
-  app.use(transactions);
-  app.use(findBeneficiary);
-  app.use(livechat);
-  app.use(updatePushID);
-  app.use("/version", getCurrentVersion);
+app.get("/api/sync-db", async (req, res) => {
+  console.log("Syncing db");
+  await db.sync({});
 
-  // Admin
-  app.use(require("./routes/admin/auth/login"));
-  app.use(require("./routes/admin/user/get-all-users"));
-  app.use(require("./routes/admin/user/change-account-tier"));
-  app.use(require("./routes/admin/user/change-user-password"));
-  app.use(require("./routes/admin/user/change-user-profile-pic"));
-  app.use(require("./routes/admin/user/delete-user"));
-  app.use(require("./routes/admin/user/update-kyc-status"));
-  app.use(require("./routes/admin/user/update-balance"));
-
-  app.use(require("./routes/admin/livehchat/get-all-livechat"));
-  app.use(require("./routes/admin/livehchat/send-message"));
-
-  app.use(require("./routes/admin/transaction/delete-transaction"));
-  app.use(require("./routes/admin/transaction/get-user-transactions"));
-  app.use(require("./routes/admin/transaction/update-transaction"));
-  app.use(require("./routes/admin/transaction/create-transaction"));
+  res.send("Done");
 });
+
+app.use("/public", express.static("public"));
+app.use("/api", index);
+app.use("/api", login);
+app.use("/api", register);
+app.use("/api", user_details);
+app.use("/api", kyc_verification);
+app.use("/api", send_otp);
+app.use("/api", verify_otp);
+app.use("/api", email_verification);
+app.use("/api", password);
+app.use("/api", pin);
+app.use("/api", wallet);
+app.use("/api", transactions);
+app.use("/api", findBeneficiary);
+app.use("/api", livechat);
+app.use("/api", updatePushID);
+app.use("/api/version", getCurrentVersion);
+
+// Admin
+app.use("api", require("./routes/admin/auth/login"));
+
+app.use("/api", require("./routes/admin/user/get-all-users"));
+app.use("/api", require("./routes/admin/user/change-account-tier"));
+app.use("/api", require("./routes/admin/user/change-user-password"));
+app.use("/api", require("./routes/admin/user/change-user-profile-pic"));
+app.use("/api", require("./routes/admin/user/delete-user"));
+app.use("/api", require("./routes/admin/user/update-kyc-status"));
+app.use("/api", require("./routes/admin/user/update-balance"));
+app.use("/api", require("./routes/admin/livehchat/get-all-livechat"));
+app.use("/api", require("./routes/admin/livehchat/send-message"));
+app.use("/api", require("./routes/admin/transaction/delete-transaction"));
+app.use("/api", require("./routes/admin/transaction/get-user-transactions"));
+app.use("/api", require("./routes/admin/transaction/update-transaction"));
+app.use("/api", require("./routes/admin/transaction/create-transaction"));
 
 const server = app.listen(port, async () => {
   try {
