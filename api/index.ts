@@ -64,7 +64,7 @@ app.use("/api", updatePushID);
 app.use("/api/version", getCurrentVersion);
 
 // Admin
-app.use("api", require("./routes/admin/auth/login"));
+app.use("/api", require("./routes/admin/auth/login"));
 
 app.use("/api", require("./routes/admin/user/get-all-users"));
 app.use("/api", require("./routes/admin/user/change-account-tier"));
