@@ -8,8 +8,8 @@ import cors from "cors";
 const app: express.Application = express();
 
 var port = process.env.PORT;
-import BodyParser from "body-parser";
 import getCurrentVersion from "./routes/version-checker";
+import { connectToDatabase } from "./middleware/connectToDatabase";
 
 const index = require("./routes/index");
 const login = require("./routes/auth/login");
@@ -36,7 +36,7 @@ app.use(cors());
 app.use(morgan("common"));
 app.use(express.urlencoded({ extended: false }));
 app.use(json());
-app.use(BodyParser.urlencoded());
+app.use(connectToDatabase);
 
 app.get("/api/sync-db", async (req, res) => {
   console.log("Syncing db");

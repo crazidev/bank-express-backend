@@ -1,7 +1,7 @@
 import express, { Request, Response } from "express";
 import db from "../database";
 import { authenticateToken } from "../middleware/JWT";
-import { User, Wallet, initModels } from "../models";
+import { Wallet, initModels } from "../models";
 import { APP_NAME } from "../config/constants";
 var fs = require("fs");
 const jwt = require("jsonwebtoken"); // npm i jsonwebtoken
@@ -32,11 +32,7 @@ router.all("/test-db", async function (req: Request, res: Response) {
 
     initModels(db);
 
-    var users = await User.findAll();
-    return res.json({
-      message: "Connection has been established successfully.",
-      users: users,
-    });
+    return res.send("Connection has been established successfully.");
   } catch (error) {
     console.error("Unable to connect to the database:", error);
     return res.send("Unable to connect to the database");
