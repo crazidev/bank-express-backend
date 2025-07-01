@@ -1,5 +1,5 @@
 import express, { Request, Response } from "express";
-import db from "../../database";
+import db from "../database";
 import { authenticateToken } from "../middleware/JWT";
 import { Wallet, initModels } from "../models";
 import { APP_NAME } from "../config/constants";
