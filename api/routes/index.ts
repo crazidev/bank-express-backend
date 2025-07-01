@@ -25,6 +25,19 @@ router.all("/sync", async function (req: Request, res: Response) {
   return res.send("Server is working");
 });
 
+router.all("/test-db", async function (req: Request, res: Response) {
+  try {
+    await db.authenticate();
+    console.log("Connection has been established successfully.");
+
+    initModels(db);
+    return res.send("Connection has been established successfully.");
+  } catch (error) {
+    console.error("Unable to connect to the database:", error);
+    return res.send("Unable to connect to the database");
+  }
+});
+
 router.use("/user/", authenticateToken, (req, res, next) => {
   next();
 });
