@@ -38,65 +38,54 @@ const findBeneficiary = require("./routes/user/find-beneficiary");
 const livechat = require("./routes/user/livechat");
 const updatePushID = require("./routes/user/update-token");
 
-app.get("/sync-db", async (req, res) => {
-  console.log("Syncing db");
-  await db.sync({});
+app.use("/api", (req, res, next) => {
+  app.use("/", (req, res, next) => {
+    initModels(db);
+    next();
+  });
 
-  res.send("Done");
-});
+  app.get("/sync-db", async (req, res) => {
+    console.log("Syncing db");
+    await db.sync({});
 
-app.use("/", (req, res, next) => {
-  initModels(db);
-  next();
-});
+    res.send("Done");
+  });
 
-app.use("/public", express.static("public"));
-app.use(index);
-app.use(login);
-app.use(register);
-app.use(user_details);
-app.use(kyc_verification);
-app.use(send_otp);
-app.use(verify_otp);
-app.use(email_verification);
-app.use(password);
-app.use(pin);
-app.use(wallet);
-app.use(transactions);
-app.use(findBeneficiary);
-app.use(livechat);
-app.use(updatePushID);
-app.use("/version", getCurrentVersion);
+  app.use("/public", express.static("public"));
+  app.use(index);
+  app.use(login);
+  app.use(register);
+  app.use(user_details);
+  app.use(kyc_verification);
+  app.use(send_otp);
+  app.use(verify_otp);
+  app.use(email_verification);
+  app.use(password);
+  app.use(pin);
+  app.use(wallet);
+  app.use(transactions);
+  app.use(findBeneficiary);
+  app.use(livechat);
+  app.use(updatePushID);
+  app.use("/version", getCurrentVersion);
 
-// Admin
-app.use(require("./routes/admin/auth/login"));
+  // Admin
+  app.use(require("./routes/admin/auth/login"));
+  app.use(require("./routes/admin/user/get-all-users"));
+  app.use(require("./routes/admin/user/change-account-tier"));
+  app.use(require("./routes/admin/user/change-user-password"));
+  app.use(require("./routes/admin/user/change-user-profile-pic"));
+  app.use(require("./routes/admin/user/delete-user"));
+  app.use(require("./routes/admin/user/update-kyc-status"));
+  app.use(require("./routes/admin/user/update-balance"));
 
-app.use(require("./routes/admin/user/get-all-users"));
-app.use(require("./routes/admin/user/change-account-tier"));
-app.use(require("./routes/admin/user/change-user-password"));
-app.use(require("./routes/admin/user/change-user-profile-pic"));
-app.use(require("./routes/admin/user/delete-user"));
-app.use(require("./routes/admin/user/update-kyc-status"));
-app.use(require("./routes/admin/user/update-balance"));
+  app.use(require("./routes/admin/livehchat/get-all-livechat"));
+  app.use(require("./routes/admin/livehchat/send-message"));
 
-app.use(require("./routes/admin/livehchat/get-all-livechat"));
-app.use(require("./routes/admin/livehchat/send-message"));
-
-app.use(require("./routes/admin/transaction/delete-transaction"));
-app.use(require("./routes/admin/transaction/get-user-transactions"));
-app.use(require("./routes/admin/transaction/update-transaction"));
-app.use(require("./routes/admin/transaction/create-transaction"));
-
-app.get("/api/hello", (req, res) => {
-  res.json({ message: "Hello from Express!" });
-});
-
-app.get("/api/goodbye", (req, res) => {
-  res.json({ message: "Goodbye from Express!" });
-});
-
-app.get("/api/date", (req, res) => {
-  res.json({ message: new Date() });
+  app.use(require("./routes/admin/transaction/delete-transaction"));
+  app.use(require("./routes/admin/transaction/get-user-transactions"));
+  app.use(require("./routes/admin/transaction/update-transaction"));
+  app.use(require("./routes/admin/transaction/create-transaction"));
 });
 
 const server = app.listen(port, async () => {
