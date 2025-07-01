@@ -1,5 +1,5 @@
 import express, { Request, Response } from "express";
-import db from "../database";
+import db from "../../database";
 import { authenticateToken } from "../middleware/JWT";
 import { Wallet, initModels } from "../models";
 import { APP_NAME } from "../config/constants";
@@ -16,7 +16,6 @@ router.all("/sync", async function (req: Request, res: Response) {
     // await db.drop();
     console.log("Force sync database");
     await db.sync({ alter: true });
-    
 
     console.log("init database");
     initModels(db);

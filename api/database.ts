@@ -10,7 +10,7 @@ const config = (configs as { [key: string]: Options })[env];
 //     underscored: true
 //   }
 // })
-// 
+//
 
 const db: Sequelize = new Sequelize({
   ...config,

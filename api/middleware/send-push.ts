@@ -1,15 +1,15 @@
-import { ONESIGNAL_APP_ID, ONESIGNAL_TOKEN } from '../config/constants';
-import { AxiosResponse, AxiosError } from './../node_modules/axios/index.d';
+import { ONESIGNAL_APP_ID, ONESIGNAL_TOKEN } from "../config/constants";
+import { AxiosResponse, AxiosError } from "axios";
 const axios = require("axios");
 
 interface SendPushProps {
-  content: string,
-  subscription_ids: string[],
-  data?: {} | null,
-  heading: string,
-  group?: string,
-  big_picture?: string | null,
-  app_url?: string
+  content: string;
+  subscription_ids: string[];
+  data?: {} | null;
+  heading: string;
+  group?: string;
+  big_picture?: string | null;
+  app_url?: string;
 }
 
 export default async function sendPush(props: SendPushProps) {
@@ -23,7 +23,7 @@ export default async function sendPush(props: SendPushProps) {
     big_picture: props.big_picture,
     headings: { en: props.heading },
     contents: {
-      en: props.content
+      en: props.content,
     },
   });
 
