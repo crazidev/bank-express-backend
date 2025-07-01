@@ -4,8 +4,6 @@ import { authenticateToken } from "../middleware/JWT";
 import { Wallet, initModels } from "../models";
 import { APP_NAME } from "../config/constants";
 var fs = require("fs");
-const jwt = require("jsonwebtoken"); // npm i jsonwebtoken
-const fetch = require("node-fetch");
 
 var router = express.Router();
 
