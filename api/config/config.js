@@ -5,7 +5,7 @@ module.exports = {
     // dialect: "sqlite",
     // storage: process.env.SQLITE || "sqlite.db",
     dialect: "mysql",
-    database: "hybank",
+    database: "demo",
     username: "root",
     password: "",
     host: "127.0.0.1",
