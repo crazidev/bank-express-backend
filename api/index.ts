@@ -1,10 +1,10 @@
-// Import the express in typescript file
+require("dotenv").config();
+
 import express, { json } from "express";
 import { initModels } from "./models";
 import db from "./database";
 import morgan from "morgan";
 import cors from "cors";
-require("dotenv").config();
 const app: express.Application = express();
 
 var port = process.env.PORT;
@@ -86,6 +86,18 @@ app.use(require("./routes/admin/transaction/delete-transaction"));
 app.use(require("./routes/admin/transaction/get-user-transactions"));
 app.use(require("./routes/admin/transaction/update-transaction"));
 app.use(require("./routes/admin/transaction/create-transaction"));
+
+app.get("/api/hello", (req, res) => {
+  res.json({ message: "Hello from Express!" });
+});
+
+app.get("/api/goodbye", (req, res) => {
+  res.json({ message: "Goodbye from Express!" });
+});
+
+app.get("/api/date", (req, res) => {
+  res.json({ message: new Date() });
+});
 
 const server = app.listen(port, async () => {
   try {
